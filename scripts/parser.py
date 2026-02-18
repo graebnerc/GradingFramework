@@ -38,7 +38,7 @@ _HEADER_RE = re.compile(
 # Matches:  *Note [page 4]:* content...
 # Captures: (type, page_number, content_until_next_annotation_or_end)
 _ANNOTATION_RE = re.compile(
-    r"\*(\w[\w\s]*?)\s*\[page\s*(\d+)\]:\*\s*(.*?)(?=\n\*\w[\w\s]*?\s*\[page|\n#{1,3}\s|\Z)",
+    r"\*(\w[\w\s]*?)\s*\[page\s*(\d+)\]:\*\s*(.*?)(?=\n\s*\*\w[\w\s]*?\s*\[page|\n#{1,3}\s|\Z)",
     re.DOTALL,
 )
 
@@ -46,7 +46,7 @@ _ANNOTATION_RE = re.compile(
 _TAG_RE = re.compile(
     r"^(" + "|".join(DIMENSIONS) + r")"  # dimension
     r"(?:\.([\w]+))?"                     # optional .sub_criterion
-    r"\s*(\+\+?|--?|~)"                  # valence
+    r"\s*(\+\+?|--?|~|[?0])"             # valence (? and 0 treated as neutral)
     r"\s*(.*)",                           # comment text
     re.DOTALL,
 )
@@ -111,6 +111,8 @@ def _valence_to_weight(valence: Optional[str]) -> float:
         "++": 2.0,
         "+": 1.0,
         "~": 0.0,
+        "?": 0.0,
+        "0": 0.0,
         "-": -1.0,
         "--": -2.0,
     }.get(valence, 0.0)

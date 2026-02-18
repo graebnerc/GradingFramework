@@ -286,16 +286,12 @@ def generate_ratings_template(
             else:
                 sub_criteria[sub_key] = None  # null → inherits dimension score
 
-        # Dimension score: preserve any existing value (manual or accepted auto).
-        # Only auto-populate when no score has been set yet.
+        # Dimension score: null by default (compute_scores derives from annotations).
+        # Only set when the user explicitly writes a manual override.
         existing_score = existing.get("score")
-        if existing_score is not None:
-            score = existing_score
-        else:
-            score = auto_score
 
         dimensions[code] = {
-            "score": score,
+            "score": existing_score,
             "comment": existing.get("comment", ""),
             "sub_criteria": sub_criteria,
             "_auto_score": auto_score,  # informational; shows what the system computed
