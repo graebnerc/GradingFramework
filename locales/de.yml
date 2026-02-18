@@ -1,0 +1,48 @@
+# Deutsche Locale-Strings für Gutachten
+
+report:
+  title: "Gutachten"
+  summary: "Zusammenfassung"
+  detailed: "Detailbewertung"
+  overall_remarks: "Gesamtbewertung"
+  appendix: "Anhang: Alle Annotationen"
+  annotations_from: "Konkrete Hinweise aus der Arbeit"
+  no_annotations: "Keine spezifischen Texthinweise für diese Dimension."
+  score_label: "Punkte"
+  weight_label: "Gewicht"
+  rating_label: "Bewertung"
+  dimension_label: "Dimension"
+  overall_score: "Gesamtpunktzahl"
+  page_abbr: "S."
+  sub_criteria_heading: "Unterkriterien"
+  comment_heading: "Einschätzung"
+  generated_note: "Erstellt mit dem Grading Framework"
+
+ratings:
+  3: "Sehr gut"
+  2: "Gut"
+  1: "Ausreichend"
+  0: "Mangelhaft"
+
+valence:
+  "++": "Besonderer Pluspunkt"
+  "+": "Pluspunkt"
+  "~": "Beobachtung"
+  "-": "Manko"
+  "--": "Deutliches Manko"
+
+cover:
+  salutation: 'Sehr geehrte Damen und Herren, '
+  intro: 'In Ihrer Arbeit „{title}" bearbeitet {student} ...'
+  assessment_lead: "Die Arbeit wird folgendermaßen bewertet:"
+  grade_line: "Daraus ergibt sich die folgende Gesamtnote:"
+  details_note: "Details und weitere Hinweise finden Sie auf den nächsten Seiten."
+  closing: "Mit freundlichen Grüßen"
+
+meta:
+  student: "Studierende/r"
+  thesis_title: "Titel der Arbeit"
+  course: "Veranstaltung"
+  semester: "Semester"
+  date: "Datum"
+  grader: "Gutachter/in"

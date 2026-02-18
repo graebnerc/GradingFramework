@@ -1,0 +1,30 @@
+# Student data (working + completed)
+grading/
+complete/
+
+# Generated outputs
+*.docx
+!templates/Muster.docx
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# Quarto cache
+.quarto/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor temp files
+*~
+~$*
+*.swp
+
+# IDE
+.idea/
+.vscode/

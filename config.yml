@@ -1,0 +1,48 @@
+# ============================================================
+# Grading Framework — Global Configuration
+# ============================================================
+
+# Your name as it appears on grading reports
+author: "Prof. Dr. Claudius Graebner"
+institution: "Europa Universität Flensburg"
+
+# Default report language: "en" or "de" (override with --lang)
+default_language: "en"
+
+# Output formats (override with --format)
+default_formats:
+  - docx
+  - pdf
+
+# Directories (relative to this config file)
+grading_directory: "grading"
+templates_directory: "templates"
+
+# Path to your university's Word template for Quarto reference-doc.
+# Replace this placeholder with your actual .docx letterhead.
+reference_doc: "templates/reference.docx"
+
+# Score scale: 0–3 (integer sub-criterion scores)
+#   0 = insufficient / mangelhaft
+#   1 = adequate    / ausreichend
+#   2 = good        / gut
+#   3 = excellent   / sehr gut
+#
+# The default score (when no annotations exist for a dimension)
+# is the midpoint 1.5 — an "average" thesis gets an average grade.
+default_score: 1.5
+
+# Optional: point-to-grade mapping (fill in your own scale)
+# The system reports percentage and raw scores; you map to grades.
+# grade_map:
+#   - {min_pct: 95, grade: "1.0"}
+#   - {min_pct: 90, grade: "1.3"}
+#   - {min_pct: 85, grade: "1.7"}
+#   - {min_pct: 80, grade: "2.0"}
+#   - {min_pct: 75, grade: "2.3"}
+#   - {min_pct: 70, grade: "2.7"}
+#   - {min_pct: 65, grade: "3.0"}
+#   - {min_pct: 60, grade: "3.3"}
+#   - {min_pct: 55, grade: "3.7"}
+#   - {min_pct: 50, grade: "4.0"}
+#   - {min_pct:  0, grade: "5.0"}

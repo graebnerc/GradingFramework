@@ -1,0 +1,48 @@
+# English locale strings for grading reports
+
+report:
+  title: "Thesis Grading Report"
+  summary: "Summary"
+  detailed: "Detailed Assessment"
+  overall_remarks: "Overall Remarks"
+  appendix: "Appendix: All Annotations"
+  annotations_from: "Specific comments from the thesis"
+  no_annotations: "No specific comments for this dimension."
+  score_label: "Score"
+  weight_label: "Weight"
+  rating_label: "Rating"
+  dimension_label: "Dimension"
+  overall_score: "Overall Score"
+  page_abbr: "p."
+  sub_criteria_heading: "Sub-Criteria"
+  comment_heading: "Assessment"
+  generated_note: "Generated with the Grading Framework"
+
+ratings:
+  3: "Excellent"
+  2: "Good"
+  1: "Adequate"
+  0: "Insufficient"
+
+valence:
+  "++": "strong strength"
+  "+": "strength"
+  "~": "observation"
+  "-": "issue"
+  "--": "notable issue"
+
+cover:
+  salutation: 'Dear Madam or Sir, '
+  intro: 'In their thesis "{title}", {student} ...'
+  assessment_lead: "The thesis is assessed as follows:"
+  grade_line: "This results in the following overall grade:"
+  details_note: "Details and further notes can be found on the following pages."
+  closing: "Kind regards,"
+
+meta:
+  student: "Student"
+  thesis_title: "Thesis Title"
+  course: "Course"
+  semester: "Semester"
+  date: "Date"
+  grader: "Graded by"

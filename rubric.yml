@@ -1,0 +1,139 @@
+# ============================================================
+# Grading Rubric — Dimension & Sub-Criteria Definitions
+# ============================================================
+#
+# Scoring scale per sub-criterion: 0–3
+#   0 = insufficient    1 = adequate    2 = good    3 = excellent
+#
+# Each dimension score = mean of its sub-criteria scores.
+# Overall score = weighted sum of dimension scores.
+#
+# Tag syntax for annotations:
+#   DIM+   positive      DIM-   negative      DIM~   neutral
+#   DIM++  strong pos.   DIM--  strong neg.
+#   DIM.sub+  targets a specific sub-criterion (optional)
+
+dimensions:
+
+  ARG:
+    name_en: "Argumentation & Logic"
+    name_de: "Argumentation & Logik"
+    weight: 0.20
+    sub_criteria:
+      thesis_question:
+        name_en: "Clear thesis / research question"
+        name_de: "Klare These / Forschungsfrage"
+      logical_coherence:
+        name_en: "Logical coherence of argument"
+        name_de: "Logische Kohärenz der Argumentation"
+      evidence_support:
+        name_en: "Claims supported by evidence"
+        name_de: "Behauptungen durch Belege gestützt"
+      conclusion:
+        name_en: "Conclusion follows from analysis"
+        name_de: "Schlussfolgerung folgt aus der Analyse"
+
+  MET:
+    name_en: "Research Design & Methods"
+    name_de: "Forschungsdesign & Methoden"
+    weight: 0.15
+    sub_criteria:
+      appropriateness:
+        name_en: "Method appropriate to question"
+        name_de: "Methode der Fragestellung angemessen"
+      explanation:
+        name_en: "Method clearly explained"
+        name_de: "Methode nachvollziehbar erläutert"
+      limitations:
+        name_en: "Limitations acknowledged"
+        name_de: "Grenzen der Methodik reflektiert"
+      transparency:
+        name_en: "Reproducibility / transparency"
+        name_de: "Nachvollziehbarkeit / Transparenz"
+
+  LIT:
+    name_en: "Literature & Theory"
+    name_de: "Literatur & Theorie"
+    weight: 0.15
+    sub_criteria:
+      relevance:
+        name_en: "Relevant and sufficient sources"
+        name_de: "Relevante und ausreichende Quellen"
+      framework:
+        name_en: "Theoretical framework appropriate"
+        name_de: "Theoretischer Rahmen angemessen"
+      engagement:
+        name_en: "Engagement with literature (not just reporting)"
+        name_de: "Auseinandersetzung mit Literatur (nicht nur Wiedergabe)"
+      state_of_research:
+        name_en: "Current state of research reflected"
+        name_de: "Aktueller Forschungsstand berücksichtigt"
+
+  RES:
+    name_en: "Results & Analysis"
+    name_de: "Ergebnisse & Analyse"
+    weight: 0.20
+    sub_criteria:
+      presentation:
+        name_en: "Findings clearly presented"
+        name_de: "Befunde klar dargestellt"
+      depth:
+        name_en: "Analysis depth and rigor"
+        name_de: "Analysetiefe und Sorgfalt"
+      addresses_question:
+        name_en: "Results address the research question"
+        name_de: "Ergebnisse beantworten die Forschungsfrage"
+      data_use:
+        name_en: "Appropriate use of data / material"
+        name_de: "Angemessener Umgang mit Daten / Material"
+
+  REF:
+    name_en: "Critical Reflection"
+    name_de: "Kritische Reflexion"
+    weight: 0.10
+    sub_criteria:
+      self_critical:
+        name_en: "Self-critical assessment of own work"
+        name_de: "Selbstkritische Einschätzung der eigenen Arbeit"
+      alternatives:
+        name_en: "Awareness of alternative interpretations"
+        name_de: "Bewusstsein für alternative Deutungen"
+      implications:
+        name_en: "Discussion of broader implications"
+        name_de: "Diskussion weiterführender Implikationen"
+      honesty:
+        name_en: "Honest treatment of limitations"
+        name_de: "Ehrlicher Umgang mit Einschränkungen"
+
+  CRF:
+    name_en: "Academic Craft"
+    name_de: "Wissenschaftliches Handwerk"
+    weight: 0.15
+    sub_criteria:
+      structure:
+        name_en: "Structure and coherence (red thread)"
+        name_de: "Struktur und Kohärenz (roter Faden)"
+      language:
+        name_en: "Language and expression"
+        name_de: "Sprache und Ausdruck"
+      citation:
+        name_en: "Citation and referencing"
+        name_de: "Zitation und Quellenangaben"
+      formatting:
+        name_en: "Formatting, figures, indices"
+        name_de: "Formatierung, Abbildungen, Verzeichnisse"
+
+  IND:
+    name_en: "Independence & Difficulty"
+    name_de: "Eigenständigkeit & Schwierigkeitsgrad"
+    weight: 0.05
+    sub_criteria:
+      ambition:
+        name_en: "Ambition of topic"
+        name_de: "Ambitioniertheit des Themas"
+      originality:
+        name_en: "Originality of approach"
+        name_de: "Originalität des Zugangs"
+      independence:
+        name_en: "Independent intellectual contribution"
+        name_de: "Eigenständiger intellektueller Beitrag"
