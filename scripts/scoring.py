@@ -286,16 +286,10 @@ def generate_ratings_template(
             else:
                 sub_criteria[sub_key] = None  # null → inherits dimension score
 
-        # Dimension score: preserve ONLY if user manually changed it
-        # (i.e., it differs from both the default and any previous auto score)
-        prev_auto = existing.get("_auto_score", default)
+        # Dimension score: preserve any existing value (manual or accepted auto).
+        # Only auto-populate when no score has been set yet.
         existing_score = existing.get("score")
-        if (
-            existing_score is not None
-            and existing_score != default
-            and existing_score != prev_auto
-        ):
-            # User has manually edited the score — keep it
+        if existing_score is not None:
             score = existing_score
         else:
             score = auto_score
