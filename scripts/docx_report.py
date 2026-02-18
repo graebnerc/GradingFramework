@@ -416,11 +416,17 @@ def _build_detail_pages(doc, result: GradingResult, locale: dict,
 
         # Assessment comment
         if d.comment:
-            _add_paragraph(
-                doc,
-                f"{l['report']['comment_heading']}: {d.comment}",
-                font_size=BODY_SIZE, space_before=8, space_after=4,
-            )
+            p = doc.add_paragraph()
+            pf = p.paragraph_format
+            pf.space_before = Pt(8)
+            pf.space_after = Pt(4)
+            run = p.add_run(f"{l['report']['comment_heading']}: ")
+            run.bold = True
+            run.font.size = BODY_SIZE
+            run.font.name = BODY_FONT
+            run = p.add_run(d.comment)
+            run.font.size = BODY_SIZE
+            run.font.name = BODY_FONT
 
         # Annotations
         dim_annotations = [

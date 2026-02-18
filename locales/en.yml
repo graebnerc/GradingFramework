@@ -15,7 +15,7 @@ report:
   overall_score: "Overall Score"
   page_abbr: "p."
   sub_criteria_heading: "Sub-Criteria"
-  comment_heading: "Assessment"
+  comment_heading: "Feedback"
   generated_note: "Generated with the Grading Framework"
 
 ratings:

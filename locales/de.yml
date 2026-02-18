@@ -15,7 +15,7 @@ report:
   overall_score: "Gesamtpunktzahl"
   page_abbr: "S."
   sub_criteria_heading: "Unterkriterien"
-  comment_heading: "Einschätzung"
+  comment_heading: "Feedback"
   generated_note: "Erstellt mit dem Grading Framework"
 
 ratings:
