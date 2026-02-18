@@ -1,0 +1,329 @@
+---
+title: "Grading Rubric for Academic Theses"
+author: "Prof. Dr. Claudius Graebner"
+date: today
+date-modified: "2026-02-18"
+modified-title: "Last modified"
+date-format: "MMMM DD, YYYY"
+lang: en
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    theme: cosmo
+    embed-resources: true
+  pdf:
+    documentclass: scrartcl
+    papersize: a4
+    fontsize: 11pt
+    geometry: "margin=2.5cm"
+    toc: false
+  docx:
+    toc: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+library(flextable)
+library(officer)
+
+# Color palette
+clr_header <- "#1B3A5C"
+clr_header_text <- "#FFFFFF"
+clr_light <- "#F0F4F8"
+clr_accent <- "#2E6EA6"
+
+# Consistent table theme
+theme_rubric <- function(ft) {
+  ft |>
+    fontsize(size = 10, part = "all") |>
+    font(fontname = "Arial", part = "all") |>
+    bg(bg = clr_header, part = "header") |>
+    color(color = clr_header_text, part = "header") |>
+    bold(part = "header") |>
+    align(align = "left", part = "all") |>
+    border_remove() |>
+    hline_top(border = fp_border(color = clr_header, width = 2), part = "header") |>
+    hline_bottom(border = fp_border(color = clr_header, width = 2), part = "header") |>
+    hline_bottom(border = fp_border(color = clr_header, width = 1.5), part = "body") |>
+    padding(padding.top = 4, padding.bottom = 4, part = "all") |>
+    autofit()
+}
+```
+
+## Overview
+
+Your thesis is assessed along seven dimensions, each weighted according to its
+importance. Every dimension is scored on a scale from 0 to 3 points.
+The overall grade results from the weighted sum of all dimension scores.
+
+```{r}
+#| label: tbl-overview
+#| tbl-cap: "Assessment dimensions and weights"
+
+overview <- data.frame(
+  No = 1:7,
+  Dimension = c(
+    "Argumentation & Logic",
+    "Research Design & Methods",
+    "Literature & Theory",
+    "Results & Analysis",
+    "Critical Reflection",
+    "Academic Craft",
+    "Independence & Difficulty"
+  ),
+  Code = c("ARG", "MET", "LIT", "RES", "REF", "CRF", "IND"),
+  Weight = c("20%", "15%", "15%", "20%", "10%", "15%", "5%")
+)
+
+flextable(overview) |>
+  theme_rubric() |>
+  align(j = c("No", "Code", "Weight"), align = "center", part = "all") |>
+  width(j = "Dimension", width = 3.2) |>
+  width(j = "Weight", width = 0.8)
+```
+
+## Scoring Scale
+
+```{r}
+#| label: tbl-scale
+#| tbl-cap: "Scoring scale"
+
+scale_df <- data.frame(
+  Score = c("3", "2", "1", "0"),
+  Rating = c("Excellent", "Good", "Adequate", "Insufficient"),
+  Description = c(
+    "Clearly exceeds expectations; outstanding quality",
+    "Fully meets expectations with solid quality throughout",
+    "Meets basic requirements but with noticeable weaknesses",
+    "Does not meet requirements; substantial deficiencies"
+  )
+)
+
+flextable(scale_df) |>
+  theme_rubric() |>
+  align(j = "Score", align = "center", part = "all") |>
+  width(j = "Description", width = 4.0)
+```
+
+For dimensions where nothing particularly noteworthy stands out --- neither positively
+nor negatively --- a default score of 1.5 points is assigned. The grade therefore
+reflects deviations from this average, both strengths and weaknesses.
+
+## Dimensions in Detail
+
+### 1. Argumentation & Logic (ARG, 20%)
+
+This dimension assesses the quality and persuasiveness of your reasoning.
+
+```{r}
+#| label: tbl-arg
+
+arg_df <- data.frame(
+  Criterion = c(
+    "Clear thesis / research question",
+    "Logical coherence of argument",
+    "Claims supported by evidence",
+    "Conclusion follows from analysis"
+  ),
+  Description = c(
+    "Is there a precise, well-delimited research question or thesis statement?",
+    "Do the arguments follow logically and without contradiction?",
+    "Are claims backed up with sources, data, or examples?",
+    "Does the conclusion follow naturally from the preceding analysis?"
+  )
+)
+
+flextable(arg_df) |>
+  theme_rubric() |>
+  width(j = "Criterion", width = 2.8) |>
+  width(j = "Description", width = 3.8)
+```
+
+### 2. Research Design & Methods (MET, 15%)
+
+This dimension assesses whether the methodology fits the research question and is
+presented transparently.
+
+```{r}
+#| label: tbl-met
+
+met_df <- data.frame(
+  Criterion = c(
+    "Method appropriate to question",
+    "Method clearly explained",
+    "Limitations acknowledged",
+    "Reproducibility / transparency"
+  ),
+  Description = c(
+    "Does the chosen method suit the research question and the material?",
+    "Is the procedure described clearly enough for others to follow?",
+    "Are methodological limitations identified and discussed?",
+    "Could other researchers reproduce the analysis with the information provided?"
+  )
+)
+
+flextable(met_df) |>
+  theme_rubric() |>
+  width(j = "Criterion", width = 2.8) |>
+  width(j = "Description", width = 3.8)
+```
+
+### 3. Literature & Theory (LIT, 15%)
+
+This dimension assesses how you engage with scholarly literature and
+the theoretical grounding of your work.
+
+```{r}
+#| label: tbl-lit
+
+lit_df <- data.frame(
+  Criterion = c(
+    "Relevant and sufficient sources",
+    "Theoretical framework appropriate",
+    "Engagement with literature",
+    "Current state of research reflected"
+  ),
+  Description = c(
+    "Are the key works on the topic included, and is coverage sufficient?",
+    "Is a coherent theoretical framework chosen and justified?",
+    "Is the literature critically engaged with, not merely summarised?",
+    "Are recent publications and developments taken into account?"
+  )
+)
+
+flextable(lit_df) |>
+  theme_rubric() |>
+  width(j = "Criterion", width = 2.8) |>
+  width(j = "Description", width = 3.8)
+```
+
+### 4. Results & Analysis (RES, 20%)
+
+This dimension assesses how findings are presented and interpreted.
+
+```{r}
+#| label: tbl-res
+
+res_df <- data.frame(
+  Criterion = c(
+    "Findings clearly presented",
+    "Analysis depth and rigor",
+    "Results address the research question",
+    "Appropriate use of data / material"
+  ),
+  Description = c(
+    "Are the results presented in a clear and accessible way?",
+    "Does the analysis go beyond the superficial and show thoroughness?",
+    "Do the findings relate clearly to the research question posed at the outset?",
+    "Is the data or material used and interpreted appropriately?"
+  )
+)
+
+flextable(res_df) |>
+  theme_rubric() |>
+  width(j = "Criterion", width = 2.8) |>
+  width(j = "Description", width = 3.8)
+```
+
+### 5. Critical Reflection (REF, 10%)
+
+This dimension assesses your ability to evaluate your own work and consider
+alternative perspectives.
+
+```{r}
+#| label: tbl-ref
+
+ref_df <- data.frame(
+  Criterion = c(
+    "Self-critical assessment of own work",
+    "Awareness of alternative interpretations",
+    "Discussion of broader implications",
+    "Honest treatment of limitations"
+  ),
+  Description = c(
+    "Are the strengths and weaknesses of your own work openly acknowledged?",
+    "Are alternative interpretations of the results considered?",
+    "Are wider questions and consequences discussed?",
+    "Are limitations dealt with openly rather than concealed?"
+  )
+)
+
+flextable(ref_df) |>
+  theme_rubric() |>
+  width(j = "Criterion", width = 2.8) |>
+  width(j = "Description", width = 3.8)
+```
+
+### 6. Academic Craft (CRF, 15%)
+
+This dimension assesses formal aspects such as language, structure, citation
+practice, and formatting.
+
+```{r}
+#| label: tbl-crf
+
+crf_df <- data.frame(
+  Criterion = c(
+    "Structure and coherence (red thread)",
+    "Language and expression",
+    "Citation and referencing",
+    "Formatting, figures, indices"
+  ),
+  Description = c(
+    "Is the work logically structured with a clear thread running through it?",
+    "Is the language precise, clear, and appropriate for an academic context?",
+    "Are citations consistent and correct, and is the bibliography complete?",
+    "Do formatting, figures, and indices meet the stated requirements?"
+  )
+)
+
+flextable(crf_df) |>
+  theme_rubric() |>
+  width(j = "Criterion", width = 2.8) |>
+  width(j = "Description", width = 3.8)
+```
+
+### 7. Independence & Difficulty (IND, 5%)
+
+This dimension recognises intellectual independence and the ambition of the
+chosen topic.
+
+```{r}
+#| label: tbl-ind
+
+ind_df <- data.frame(
+  Criterion = c(
+    "Ambition of topic",
+    "Originality of approach",
+    "Independent intellectual contribution"
+  ),
+  Description = c(
+    "How challenging is the chosen topic?",
+    "Is there an independent, creative approach to the subject?",
+    "Does the work make its own intellectual contribution beyond mere summary?"
+  )
+)
+
+flextable(ind_df) |>
+  theme_rubric() |>
+  width(j = "Criterion", width = 2.8) |>
+  width(j = "Description", width = 3.8)
+```
+
+## How the Overall Grade Is Calculated
+
+The overall score is the weighted sum of all dimension scores:
+
+$$
+\text{Overall score} = \sum_{d=1}^{7} w_d \cdot s_d
+$$
+
+where $w_d$ is the weight and $s_d$ the score (0--3) for dimension $d$.
+The overall score thus ranges from 0 to 3.
+The mapping from scores to letter grades follows the grading key of the
+respective course.

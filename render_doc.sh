@@ -1,0 +1,2 @@
+quarto render documentation/grading_rubric_de.qmd
+quarto render documentation/grading_rubric_en.qmd

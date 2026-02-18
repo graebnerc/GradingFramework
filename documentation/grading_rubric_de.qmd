@@ -1,0 +1,330 @@
+---
+title: "Bewertungsraster für wissenschaftliche Arbeiten"
+author: "Prof. Dr. Claudius Graebner"
+date: today
+date-modified: "2026-02-18"
+modified-title: "Zuletzt geändert"
+date-format: "DD. MMMM YYYY"
+lang: de
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    theme: cosmo
+    embed-resources: true
+  pdf:
+    documentclass: scrartcl
+    papersize: a4
+    fontsize: 11pt
+    geometry: "margin=2.5cm"
+    toc: false
+  docx:
+    toc: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+library(flextable)
+library(officer)
+
+# Color palette
+clr_header <- "#1B3A5C"
+clr_header_text <- "#FFFFFF"
+clr_light <- "#F0F4F8"
+clr_accent <- "#2E6EA6"
+
+# Consistent table theme
+theme_rubric <- function(ft) {
+  ft |>
+    fontsize(size = 10, part = "all") |>
+    font(fontname = "Arial", part = "all") |>
+    bg(bg = clr_header, part = "header") |>
+    color(color = clr_header_text, part = "header") |>
+    bold(part = "header") |>
+    align(align = "left", part = "all") |>
+    border_remove() |>
+    hline_top(border = fp_border(color = clr_header, width = 2), part = "header") |>
+    hline_bottom(border = fp_border(color = clr_header, width = 2), part = "header") |>
+    hline_bottom(border = fp_border(color = clr_header, width = 1.5), part = "body") |>
+    padding(padding.top = 4, padding.bottom = 4, part = "all") |>
+    autofit()
+}
+```
+
+## Überblick
+
+Ihre Arbeit wird anhand von sieben Dimensionen bewertet, die jeweils unterschiedlich
+gewichtet werden. Jede Dimension wird auf einer Skala von 0 bis 3 Punkten bewertet.
+Die Gesamtnote ergibt sich aus der gewichteten Summe der Dimensionswerte.
+
+```{r}
+#| label: tbl-overview
+#| tbl-cap: "Bewertungsdimensionen und Gewichtung"
+
+overview <- data.frame(
+  Nr = 1:7,
+  Dimension = c(
+    "Argumentation & Logik",
+    "Forschungsdesign & Methoden",
+    "Literatur & Theorie",
+    "Ergebnisse & Analyse",
+    "Kritische Reflexion",
+    "Wissenschaftliches Handwerk",
+    "Eigenständigkeit & Schwierigkeitsgrad"
+  ),
+  Kürzel = c("ARG", "MET", "LIT", "RES", "REF", "CRF", "IND"),
+  Gewicht = c("20%", "15%", "15%", "20%", "10%", "15%", "5%")
+)
+
+flextable(overview) |>
+  theme_rubric() |>
+  align(j = c("Nr", "Kürzel", "Gewicht"), align = "center", part = "all") |>
+  width(j = "Dimension", width = 3.2) |>
+  width(j = "Gewicht", width = 0.8)
+```
+
+## Bewertungsskala
+
+```{r}
+#| label: tbl-scale
+#| tbl-cap: "Bewertungsskala"
+
+scale_df <- data.frame(
+  Punkte = c("3", "2", "1", "0"),
+  Bewertung = c("Sehr gut", "Gut", "Ausreichend", "Mangelhaft"),
+  Beschreibung = c(
+    "Übertrifft die Anforderungen deutlich; zeigt herausragende Qualität",
+    "Erfüllt die Anforderungen vollständig und zeigt solide Qualität",
+    "Erfüllt die grundlegenden Anforderungen, aber mit erkennbaren Schwächen",
+    "Erfüllt die Anforderungen nicht; wesentliche Mängel vorhanden"
+  )
+)
+
+flextable(scale_df) |>
+  theme_rubric() |>
+  align(j = "Punkte", align = "center", part = "all") |>
+  width(j = "Beschreibung", width = 4.0)
+```
+
+Für Dimensionen, zu denen es keine besonderen Auffälligkeiten gibt --- weder besonders positiv noch
+negativ --- wird ein mittlerer Wert von 1,5 Punkten angesetzt. Die Note ergibt sich also aus
+den Stärken und Schwächen, die von diesem Durchschnitt abweichen.
+
+## Dimensionen im Detail
+
+### 1. Argumentation & Logik (ARG, 20%)
+
+Diese Dimension bewertet die Qualität der gedanklichen Struktur und Überzeugungskraft
+Ihrer Argumentation.
+
+```{r}
+#| label: tbl-arg
+
+arg_df <- data.frame(
+  Unterkriterium = c(
+    "Klare These / Forschungsfrage",
+    "Logische Kohärenz der Argumentation",
+    "Behauptungen durch Belege gestützt",
+    "Schlussfolgerung folgt aus der Analyse"
+  ),
+  Erläuterung = c(
+    "Wird eine präzise, abgrenzbare Forschungsfrage oder These formuliert?",
+    "Folgen die Argumente logisch aufeinander und sind sie widerspruchsfrei?",
+    "Werden Behauptungen mit Quellen, Daten oder Beispielen untermauert?",
+    "Ergibt sich das Fazit nachvollziehbar aus der vorangehenden Analyse?"
+  )
+)
+
+flextable(arg_df) |>
+  theme_rubric() |>
+  width(j = "Unterkriterium", width = 2.8) |>
+  width(j = "Erläuterung", width = 3.8)
+```
+
+### 2. Forschungsdesign & Methoden (MET, 15%)
+
+Diese Dimension bewertet, ob die gewählte Methodik der Fragestellung angemessen ist
+und transparent dargestellt wird.
+
+```{r}
+#| label: tbl-met
+
+met_df <- data.frame(
+  Unterkriterium = c(
+    "Methode der Fragestellung angemessen",
+    "Methode nachvollziehbar erläutert",
+    "Grenzen der Methodik reflektiert",
+    "Nachvollziehbarkeit / Transparenz"
+  ),
+  Erläuterung = c(
+    "Passt die Methode zur Forschungsfrage und zum Material?",
+    "Wird die Vorgehensweise so beschrieben, dass Dritte sie nachvollziehen können?",
+    "Werden die Grenzen des methodischen Zugangs benannt und eingeordnet?",
+    "Könnten andere Forschende die Analyse mit den gegebenen Informationen reproduzieren?"
+  )
+)
+
+flextable(met_df) |>
+  theme_rubric() |>
+  width(j = "Unterkriterium", width = 2.8) |>
+  width(j = "Erläuterung", width = 3.8)
+```
+
+### 3. Literatur & Theorie (LIT, 15%)
+
+Diese Dimension bewertet den Umgang mit wissenschaftlicher Literatur und die
+theoretische Fundierung der Arbeit.
+
+```{r}
+#| label: tbl-lit
+
+lit_df <- data.frame(
+  Unterkriterium = c(
+    "Relevante und ausreichende Quellen",
+    "Theoretischer Rahmen angemessen",
+    "Auseinandersetzung mit Literatur",
+    "Aktueller Forschungsstand berücksichtigt"
+  ),
+  Erläuterung = c(
+    "Werden die zentralen Arbeiten zum Thema herangezogen, und reicht der Umfang?",
+    "Wird ein schlüssiger theoretischer Rahmen gewählt und begründet?",
+    "Wird Literatur kritisch eingeordnet, nicht nur zusammengefasst?",
+    "Werden aktuelle Publikationen und Entwicklungen berücksichtigt?"
+  )
+)
+
+flextable(lit_df) |>
+  theme_rubric() |>
+  width(j = "Unterkriterium", width = 2.8) |>
+  width(j = "Erläuterung", width = 3.8)
+```
+
+### 4. Ergebnisse & Analyse (RES, 20%)
+
+Diese Dimension bewertet, wie Ergebnisse präsentiert und interpretiert werden.
+
+```{r}
+#| label: tbl-res
+
+res_df <- data.frame(
+  Unterkriterium = c(
+    "Befunde klar dargestellt",
+    "Analysetiefe und Sorgfalt",
+    "Ergebnisse beantworten die Forschungsfrage",
+    "Angemessener Umgang mit Daten / Material"
+  ),
+  Erläuterung = c(
+    "Sind die Ergebnisse verständlich und übersichtlich aufbereitet?",
+    "Geht die Analyse über Oberflächliches hinaus und ist sie sorgfältig durchgeführt?",
+    "Stehen die Ergebnisse in klarem Bezug zur eingangs formulierten Fragestellung?",
+    "Wird das Material / werden die Daten sachgerecht eingesetzt und interpretiert?"
+  )
+)
+
+flextable(res_df) |>
+  theme_rubric() |>
+  width(j = "Unterkriterium", width = 2.8) |>
+  width(j = "Erläuterung", width = 3.8)
+```
+
+### 5. Kritische Reflexion (REF, 10%)
+
+Diese Dimension bewertet, inwieweit Sie die eigene Arbeit selbstkritisch einordnen
+und alternative Perspektiven berücksichtigen.
+
+```{r}
+#| label: tbl-ref
+
+ref_df <- data.frame(
+  Unterkriterium = c(
+    "Selbstkritische Einschätzung der eigenen Arbeit",
+    "Bewusstsein für alternative Deutungen",
+    "Diskussion weiterführender Implikationen",
+    "Ehrlicher Umgang mit Einschränkungen"
+  ),
+  Erläuterung = c(
+    "Werden Stärken und Schwächen der eigenen Arbeit offen benannt?",
+    "Werden alternative Interpretationen der Ergebnisse bedacht?",
+    "Werden weiterführende Fragen und Konsequenzen diskutiert?",
+    "Wird offen mit Einschränkungen umgegangen, statt sie zu verschleiern?"
+  )
+)
+
+flextable(ref_df) |>
+  theme_rubric() |>
+  width(j = "Unterkriterium", width = 2.8) |>
+  width(j = "Erläuterung", width = 3.8)
+```
+
+### 6. Wissenschaftliches Handwerk (CRF, 15%)
+
+Diese Dimension bewertet formale Aspekte wie Sprache, Struktur, Zitation
+und Formatierung.
+
+```{r}
+#| label: tbl-crf
+
+crf_df <- data.frame(
+  Unterkriterium = c(
+    "Struktur und Kohärenz (roter Faden)",
+    "Sprache und Ausdruck",
+    "Zitation und Quellenangaben",
+    "Formatierung, Abbildungen, Verzeichnisse"
+  ),
+  Erläuterung = c(
+    "Ist die Arbeit logisch aufgebaut und zieht sich ein roter Faden hindurch?",
+    "Ist die Sprache präzise, klar und dem wissenschaftlichen Kontext angemessen?",
+    "Wird korrekt und konsistent zitiert, und ist das Literaturverzeichnis vollständig?",
+    "Entsprechen Formatierung, Abbildungen und Verzeichnisse den Anforderungen?"
+  )
+)
+
+flextable(crf_df) |>
+  theme_rubric() |>
+  width(j = "Unterkriterium", width = 2.8) |>
+  width(j = "Erläuterung", width = 3.8)
+```
+
+### 7. Eigenständigkeit & Schwierigkeitsgrad (IND, 5%)
+
+Diese Dimension würdigt die intellektuelle Eigenleistung und den Anspruch des gewählten
+Themas.
+
+```{r}
+#| label: tbl-ind
+
+ind_df <- data.frame(
+  Unterkriterium = c(
+    "Ambitioniertheit des Themas",
+    "Originalität des Zugangs",
+    "Eigenständiger intellektueller Beitrag"
+  ),
+  Erläuterung = c(
+    "Wie anspruchsvoll ist das gewählte Thema?",
+    "Wird ein eigenständiger, kreativer Zugang zum Thema gewählt?",
+    "Leistet die Arbeit einen eigenen intellektuellen Beitrag über die reine Zusammenfassung hinaus?"
+  )
+)
+
+flextable(ind_df) |>
+  theme_rubric() |>
+  width(j = "Unterkriterium", width = 2.8) |>
+  width(j = "Erläuterung", width = 3.8)
+```
+
+## Berechnung der Gesamtnote
+
+Die Gesamtpunktzahl ergibt sich aus der gewichteten Summe aller Dimensionswerte:
+
+$$
+\text{Gesamtpunktzahl} = \sum_{d=1}^{7} w_d \cdot s_d
+$$
+
+wobei $w_d$ das Gewicht und $s_d$ der Punktwert (0--3) der Dimension $d$ ist.
+Die Gesamtpunktzahl liegt somit zwischen 0 und 3.
+Die Zuordnung von Punktzahlen zu Noten erfolgt nach dem jeweiligen Notenschlüssel
+der Veranstaltung.
