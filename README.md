@@ -46,12 +46,12 @@ CRF.citation-  Quellenangaben im Literaturverzeichnis unvollständig
 - `CRF` (craft)
 - `IND` (independence)
 
-**Valence:** 
+**Valence:**
 
 - `++` strong positive
 - `+` positive
-- `~` neutral
-- `-` negative 
+- `~`, `?`, `0` neutral
+- `-` negative
 - `--` strong negative
 
 **Metadata tags** (extracted, not scored):
@@ -70,6 +70,8 @@ Highlights and untagged notes are kept as context in the report appendix.
 ```
 GradingFramework/
 ├── grade.py              # CLI (init, parse, render, pipeline, cleanup)
+├── run_all.sh            # Run pipeline for all students (double-click safe)
+├── cleanup_all.sh        # Move all students to complete/ (double-click safe)
 ├── config.yml            # Author, institution, default language, score defaults
 ├── rubric.yml            # Dimensions, weights, sub-criteria
 ├── requirements.txt      # pyyaml, click, jinja2, python-docx
@@ -101,7 +103,16 @@ GradingFramework/
 
 ## Scoring
 
-Scores range from 0 (insufficient) to 3 (excellent). When no annotations exist for a dimension, the default score is 1.5 — a thesis with nothing remarkable gets an average grade. Annotation sentiment pre-populates the scores, which you can then adjust manually in `ratings.yml`. The overall score is a weighted sum of all dimensions.
+Scores range from 0 (insufficient) to 3 (excellent). Dimension scores in `ratings.yml` are `null` by default and automatically derived from annotation sentiment. When no annotations exist for a dimension, the default score is 1.5 (midpoint). To override a score, set it to a numeric value in `ratings.yml` — manual values are always preserved across pipeline runs. The `_auto_score` field shows what the system computed for reference. The overall score is a weighted sum of all dimensions.
+
+## Batch Scripts
+
+Two double-click-safe shell scripts are provided for batch operations:
+
+- **`run_all.sh`** — Runs the full pipeline (parse + render) for every student folder in `grading/`. Errors in one student don't abort the rest; a summary is printed at the end.
+- **`cleanup_all.sh`** — Moves all student folders from `grading/` to `complete/`.
+
+Both scripts can be run from Terminal (`./run_all.sh`) or by double-clicking in Finder. They set the correct encoding and keep the Terminal window open so you can review the output.
 
 ## Setup
 
