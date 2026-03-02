@@ -47,6 +47,7 @@ _TAG_RE = re.compile(
     r"^(" + "|".join(DIMENSIONS) + r")"  # dimension
     r"(?:\.([\w]+))?"                     # optional .sub_criterion
     r"\s*(\+\+?|--?|~|[?0])"             # valence (? and 0 treated as neutral)
+    , re.IGNORECASE
     r"\s*(.*)",                           # comment text
     re.DOTALL,
 )
@@ -158,7 +159,7 @@ def parse_annotations(md_path: Path) -> ParseResult:
         tag_match = _TAG_RE.match(content)
 
         if tag_match:
-            dimension = tag_match.group(1)
+            dimension = tag_match.group(1).upper()
             sub_criterion = tag_match.group(2)  # may be None
             valence = tag_match.group(3)
             comment_text = tag_match.group(4).strip()
