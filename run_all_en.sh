@@ -34,7 +34,7 @@ for name in "${students[@]}"; do
   echo "════════════════════════════════════════"
   echo "  $name"
   echo "════════════════════════════════════════"
-  if "$PYTHON" "$SCRIPT_DIR/grade.py" pipeline "$name"; then
+  if "$PYTHON" "$SCRIPT_DIR/grade.py" pipeline "$name" --lang en; then
     echo "  OK"
   else
     echo "  FAILED (exit code $?)"
