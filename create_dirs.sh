@@ -22,8 +22,8 @@ for mdfile in "$GRADING_DIR"/*.md; do
 
   if [ ! -d "$target_dir" ]; then
     mkdir -p "$target_dir"
-    mv "$mdfile" "$target_dir/"
-    echo "Created $name/ and moved $name.md into it."
+    mv "$mdfile" "$target_dir/annotations.md"
+    echo "Created $name/ and moved $name.md into it as annotations.md."
     moved=$((moved + 1))
   fi
 done
