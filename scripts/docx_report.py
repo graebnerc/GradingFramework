@@ -365,10 +365,11 @@ def _build_cover_page(doc, result: GradingResult, locale: dict,
 
 
 def _build_detail_pages(doc, result: GradingResult, locale: dict,
-                        lang: str):
+                        lang: str, config: dict = None):
     """Build pages 2+: per-dimension detailed assessment."""
     l = locale
     name_key = f"name_{lang}"
+    show_sub_tables = (config or {}).get("show_sub_tables", False)
 
     # Section heading
     _add_paragraph(
@@ -397,8 +398,13 @@ def _build_detail_pages(doc, result: GradingResult, locale: dict,
             bold=True, font_size=BODY_SIZE, space_after=6,
         )
 
-        # Sub-criteria table
-        if d.sub_criteria:
+        # Sub-criteria table — only shown if explicitly enabled or if
+        # annotations target specific sub-criteria in this dimension.
+        has_sub_annotations = any(
+            a.get("sub_criterion") for a in result.annotations
+            if a.get("dimension") == d.code
+        )
+        if d.sub_criteria and (show_sub_tables or has_sub_annotations):
             sub_headers = [
                 l["report"]["sub_criteria_heading"],
                 l["report"]["score_label"],
@@ -608,7 +614,7 @@ def build_docx_report(
 
     # Page break → detailed assessment
     doc.add_page_break()
-    _build_detail_pages(doc, result, locale, lang)
+    _build_detail_pages(doc, result, locale, lang, config)
 
     # Appendix
     _build_appendix(doc, result, locale)
