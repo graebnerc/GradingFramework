@@ -22,6 +22,11 @@ templates_directory: "templates"
 # Replace this placeholder with your actual .docx letterhead.
 reference_doc: "templates/reference.docx"
 
+# Show sub-criteria tables in detailed assessment?
+# false = only show when annotations target specific sub-criteria
+# true  = always show for every dimension
+show_sub_tables: false
+
 # Score scale: 0–3 (integer sub-criterion scores)
 #   0 = insufficient / mangelhaft
 #   1 = adequate    / ausreichend
