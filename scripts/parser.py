@@ -47,9 +47,8 @@ _TAG_RE = re.compile(
     r"^(" + "|".join(DIMENSIONS) + r")"  # dimension
     r"(?:\.([\w]+))?"                     # optional .sub_criterion
     r"\s*(\+\+?|--?|~|[?0])"             # valence (? and 0 treated as neutral)
-    , re.IGNORECASE
     r"\s*(.*)",                           # comment text
-    re.DOTALL,
+    re.DOTALL | re.IGNORECASE,
 )
 
 # Matches metadata tags:  NAME Jane Doe   or   TIT Some Title
