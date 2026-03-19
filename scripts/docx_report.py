@@ -318,7 +318,7 @@ def _build_cover_page(doc, result: GradingResult, locale: dict,
     rows = []
     for d in result.dimensions:
         dim_name = _dim_display_name(d, name_key)
-        rows.append([dim_name, f"{d.weight*100:.0f}%", f"{d.score:.1f} / 3.0"])
+        rows.append([dim_name, f"{d.weight*100:.0f}%", f"{d.score:.2f} / 3.0"])
 
     total = [
         l["report"]["overall_score"],
@@ -394,7 +394,7 @@ def _build_detail_pages(doc, result: GradingResult, locale: dict,
         # Score line
         _add_paragraph(
             doc,
-            f"{l['report']['score_label']}: {d.score:.1f} / 3.0 — {rating}",
+            f"{l['report']['score_label']}: {d.score:.2f} / 3.0 — {rating}",
             bold=True, font_size=BODY_SIZE, space_after=6,
         )
 
@@ -630,6 +630,6 @@ def build_docx_report(
     # )
 
     # Save
-    output_path = output_dir / "report.docx"
+    output_path = output_dir / f"{output_dir.name}_Report.docx"
     doc.save(str(output_path))
     return output_path

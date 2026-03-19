@@ -5,6 +5,7 @@ complete/
 # Generated outputs
 *.docx
 !templates/Muster.docx
+.Rhistory
 
 # Python
 __pycache__/
