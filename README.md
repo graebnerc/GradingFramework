@@ -356,7 +356,3 @@ Suggestions for improving the rubric, the scoring logic, or the workflow are ver
 Bug reports and pull requests are welcome via [GitHub Issues](../../issues).
 
 ---
-
-## License
-
-MIT
