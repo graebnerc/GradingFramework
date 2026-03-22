@@ -17,6 +17,7 @@ report:
   sub_criteria_heading: "Unterkriterien"
   comment_heading: "Feedback"
   generated_note: "Erstellt mit dem Grading Framework"
+  adjustment_label: "Zusatzbewertung"
 
 ratings:
   3: "Sehr gut"
@@ -33,7 +34,7 @@ valence:
 
 cover:
   salutation: 'Sehr geehrte Damen und Herren, '
-  intro: 'In Ihrer Arbeit „{title}" bearbeitet {student} ...'
+  intro: 'In der Arbeit „{title}" bearbeitet {student} ...'
   assessment_lead: "Die Arbeit wird folgendermaßen bewertet:"
   grade_line: "Daraus ergibt sich die folgende Gesamtnote:"
   details_note: "Details und weitere Hinweise finden Sie auf den nächsten Seiten."

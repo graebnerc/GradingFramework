@@ -17,6 +17,7 @@ report:
   sub_criteria_heading: "Sub-Criteria"
   comment_heading: "Feedback"
   generated_note: "Generated with the Grading Framework"
+  adjustment_label: "Adjustment"
 
 ratings:
   3: "Excellent"

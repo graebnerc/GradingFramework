@@ -56,10 +56,13 @@ class GradingResult:
     course: str
     semester: str
     date: str
+    summary: str                      # from SUM annotation tag (may be empty)
+    grade: str                        # from GRADE annotation tag (may be empty)
     overall_score: float              # 0–3
     overall_percentage: float         # 0–100
     overall_comment: str
     dimensions: List[DimensionScore]
+    adjustment: Optional[DimensionScore]  # IND — not included in weighted score
     annotations: List[dict]           # all annotations as dicts
     untagged_annotations: List[dict]
 
@@ -123,9 +126,11 @@ def compute_scores(
     student_info = ratings.get("student", {})
 
     dimension_scores: List[DimensionScore] = []
+    adjustment_score: Optional[DimensionScore] = None
 
     for code in DIMENSIONS:
         dim_def = dim_defs[code]
+        is_adjustment = dim_def.get("adjustment", False)
         dim_weight = dim_def["weight"]
         dim_name = dim_def.get(name_key, dim_def.get("name_en", code))
         dim_annotations = parse_result.by_dimension.get(code, [])
@@ -169,7 +174,8 @@ def compute_scores(
             )
 
         # --- Dimension score: manual override or mean of sub-criteria ---
-        if "score" in manual and manual["score"] is not None:
+        manual_score_set = "score" in manual and manual["score"] is not None
+        if manual_score_set:
             dim_score_val = float(manual["score"])
             dim_source = "manual"
         elif sub_scores:
@@ -186,26 +192,33 @@ def compute_scores(
         n_pos = sum(1 for a in dim_annotations if a.valence_weight > 0)
         n_neg = sum(1 for a in dim_annotations if a.valence_weight < 0)
 
-        dimension_scores.append(
-            DimensionScore(
-                code=code,
-                name=dim_name,
-                weight=dim_weight,
-                score=dim_score_val,
-                weighted_score=round(dim_score_val * dim_weight, 4),
-                source=dim_source,
-                comment=comment,
-                sub_criteria=sub_scores,
-                annotation_count=len(dim_annotations),
-                positive_count=n_pos,
-                negative_count=n_neg,
-            )
+        dim_score = DimensionScore(
+            code=code,
+            name=dim_name,
+            weight=dim_weight,
+            score=dim_score_val,
+            weighted_score=round(dim_score_val * dim_weight, 4),
+            source=dim_source,
+            comment=comment,
+            sub_criteria=sub_scores,
+            annotation_count=len(dim_annotations),
+            positive_count=n_pos,
+            negative_count=n_neg,
         )
 
-    # --- Overall score ---
+        if is_adjustment:
+            # Only expose adjustment if the user actually engaged with it
+            if manual_score_set or len(dim_annotations) > 0:
+                adjustment_score = dim_score
+        else:
+            dimension_scores.append(dim_score)
+
+    # --- Overall score (adjustment dimension excluded) ---
     overall = sum(d.weighted_score for d in dimension_scores)
     # Normalize: max possible weighted score = 3.0 × sum(weights) = 3.0 × 1.0 = 3.0
     overall_pct = round((overall / 3.0) * 100, 1)
+
+    meta = getattr(parse_result, "metadata", {}) or {}
 
     return GradingResult(
         student_name=student_info.get("name", ""),
@@ -213,10 +226,13 @@ def compute_scores(
         course=student_info.get("course", ""),
         semester=student_info.get("semester", ""),
         date=student_info.get("date", ""),
+        summary=meta.get("summary", ""),
+        grade=meta.get("grade", ""),
         overall_score=round(overall, 2),
         overall_percentage=overall_pct,
         overall_comment=ratings.get("overall_comment", "") or "",
         dimensions=dimension_scores,
+        adjustment=adjustment_score,
         annotations=[a.to_dict() for a in parse_result.annotations],
         untagged_annotations=[a.to_dict() for a in parse_result.untagged],
     )

@@ -16,6 +16,7 @@ Tag syntax:
 Metadata tags (no valence, consumed but not scored):
     NAME Jane Doe          → parsed into metadata["student_name"]
     TIT  Material Witnesses → parsed into metadata["thesis_title"]
+    SUM  Short summary...  → parsed into metadata["summary"]
 """
 
 import re
@@ -28,7 +29,7 @@ DIMENSIONS = ["ARG", "MET", "LIT", "RES", "REF", "CRF", "IND"]
 # Metadata tags — not grading dimensions; extracted to pre-fill student info.
 # Usage:  *Note [page 1]:* NAME Jane Doe
 #         *Note [page 1]:* TIT Material Witnesses and Scientific Practice
-META_TAGS = {"NAME": "student_name", "TIT": "thesis_title"}
+META_TAGS = {"NAME": "student_name", "TIT": "thesis_title", "SUM": "summary", "GRADE": "grade"}
 
 # Pre-compile patterns
 _HEADER_RE = re.compile(
@@ -131,10 +132,13 @@ def parse_annotations(md_path: Path) -> ParseResult:
     -------
     ParseResult with all annotations, grouped by dimension.
     """
-    text = md_path.read_text(encoding="utf-8")
+    raw = md_path.read_text(encoding="utf-8")
+    # Strip thesis heading lines (e.g. "#### 1. Einleitung") before parsing
+    # so they are never concatenated into annotation text by the regex.
+    text = "\n".join(line for line in raw.splitlines() if not line.startswith("#"))
 
     # --- Extract source PDF name from header ---
-    header_match = _HEADER_RE.search(text)
+    header_match = _HEADER_RE.search(raw)  # use raw so the file header still matches
     source_pdf = header_match.group(1).strip() if header_match else md_path.stem
 
     # --- Parse individual annotations ---
@@ -146,7 +150,7 @@ def parse_annotations(md_path: Path) -> ParseResult:
         page = int(match.group(2))
         content = match.group(3).strip()
 
-        # 1. Check for metadata tags (NAME, TIT) — consume, don't add as annotation
+        # 1. Check for metadata tags (NAME, TIT, SUM) — consume, don't add as annotation
         meta_match = _META_RE.match(content)
         if meta_match:
             meta_key = meta_match.group(1)          # NAME or TIT

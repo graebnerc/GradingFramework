@@ -108,7 +108,7 @@ dimensions:
   CRF:
     name_en: "Academic Craft"
     name_de: "Wissenschaftliches Handwerk"
-    weight: 0.15
+    weight: 0.20
     sub_criteria:
       structure:
         name_en: "Structure and coherence (red thread)"
@@ -126,7 +126,8 @@ dimensions:
   IND:
     name_en: "Independence & Difficulty"
     name_de: "Eigenständigkeit & Schwierigkeitsgrad"
-    weight: 0.05
+    weight: 0
+    adjustment: true
     sub_criteria:
       ambition:
         name_en: "Ambition of topic"

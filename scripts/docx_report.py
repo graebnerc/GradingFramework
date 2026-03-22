@@ -295,13 +295,20 @@ def _build_cover_page(doc, result: GradingResult, locale: dict,
     if salutation:
         _add_paragraph(doc, salutation, space_after=6)
     
-    # Intro paragraph
+    # Intro paragraph — if a SUM summary exists, strip trailing "..." and
+    # append the summary text as a continuation in the same paragraph.
     intro = l.get("cover", {}).get("intro", "").format(
         student=result.student_name,
         title=result.thesis_title,
     )
     if intro:
-        _add_paragraph(doc, intro, space_after=6)
+        if result.summary:
+            intro = intro.rstrip().rstrip(".")
+        p = _add_paragraph(doc, intro, space_after=6)
+        if result.summary:
+            run = p.add_run(result.summary)
+            run.font.size = BODY_SIZE
+            run.font.name = BODY_FONT
 
     # "Die Arbeit wird folgendermaßen bewertet:"
     assessment_lead = l.get("cover", {}).get("assessment_lead", "")
@@ -326,6 +333,12 @@ def _build_cover_page(doc, result: GradingResult, locale: dict,
         f"{result.overall_score:.2f} / 3.0",
     ]
 
+    if result.adjustment is not None:
+        adj = result.adjustment
+        adj_name = _dim_display_name(adj, name_key)
+        adj_label = l["report"].get("adjustment_label", "Adjustment")
+        rows.append([f"{adj_name} ({adj_label})", "—", f"{adj.score:.2f} / 3.0"])
+
     _create_styled_table(
         doc, headers, rows,
         col_widths=[Inches(2.6), Inches(0.7), Inches(0.9)],
@@ -345,7 +358,7 @@ def _build_cover_page(doc, result: GradingResult, locale: dict,
         run = p.add_run(grade_text)
         run.font.size = BODY_SIZE
         run.font.name = BODY_FONT
-        run = p.add_run(" NOTE")
+        run = p.add_run(f" {result.grade}" if result.grade else " NOTE")
         run.bold = True
         run.font.size = BODY_SIZE
         run.font.name = BODY_FONT
@@ -378,6 +391,9 @@ def _build_detail_pages(doc, result: GradingResult, locale: dict,
         bold=True, font_size=Pt(16), font_color=HEADING_CLR,
         space_before=0, space_after=12,
     )
+
+    if result.overall_comment:
+        _add_paragraph(doc, result.overall_comment, space_after=12)
 
     for d in result.dimensions:
         dim_name = _dim_display_name(d, name_key)
@@ -459,6 +475,77 @@ def _build_detail_pages(doc, result: GradingResult, locale: dict,
                 l["report"]["no_annotations"],
                 font_size=SMALL_SIZE, space_before=4, space_after=4,
             )
+
+    # --- Adjustment dimension (IND) ---
+    if result.adjustment is not None:
+        d = result.adjustment
+        dim_name = _dim_display_name(d, name_key)
+        rating = _score_to_rating(d.score, locale)
+        adj_label = l["report"].get("adjustment_label", "Adjustment")
+
+        _add_paragraph(
+            doc,
+            f"{d.code}: {dim_name} ({adj_label})",
+            bold=True, font_size=HEADING_SIZE, font_color=HEADING_CLR,
+            space_before=14, space_after=2,
+        )
+
+        _add_paragraph(
+            doc,
+            f"{l['report']['score_label']}: {d.score:.2f} / 3.0 — {rating}",
+            bold=True, font_size=BODY_SIZE, space_after=6,
+        )
+
+        has_sub_annotations = any(
+            a.get("sub_criterion") for a in result.annotations
+            if a.get("dimension") == d.code
+        )
+        if d.sub_criteria and (show_sub_tables or has_sub_annotations):
+            sub_headers = [
+                l["report"]["sub_criteria_heading"],
+                l["report"]["score_label"],
+                l["report"]["rating_label"],
+            ]
+            sub_rows = []
+            for s in d.sub_criteria:
+                s_rating = _score_to_rating(s.score, locale)
+                sub_rows.append([s.name, f"{s.score:.2g}", s_rating])
+            _create_styled_table(
+                doc, sub_headers, sub_rows,
+                col_widths=[Inches(3.4), Inches(0.8), Inches(1.2)],
+            )
+
+        if d.comment:
+            p = doc.add_paragraph()
+            pf = p.paragraph_format
+            pf.space_before = Pt(8)
+            pf.space_after = Pt(4)
+            run = p.add_run(f"{l['report']['comment_heading']}: ")
+            run.bold = True
+            run.font.size = BODY_SIZE
+            run.font.name = BODY_FONT
+            run = p.add_run(d.comment)
+            run.font.size = BODY_SIZE
+            run.font.name = BODY_FONT
+
+        dim_annotations = [
+            a for a in result.annotations if a.get("dimension") == d.code
+        ]
+        if dim_annotations:
+            _add_paragraph(
+                doc,
+                f"{l['report']['annotations_from']} ({len(dim_annotations)}):",
+                bold=True, font_size=SMALL_SIZE, space_before=8, space_after=2,
+            )
+            for a in dim_annotations:
+                page = a.get("page", "?")
+                valence = a.get("valence", "")
+                text = a.get("text", a.get("raw", ""))
+                valence_label = locale.get("valence", {}).get(valence, "")
+                prefix = f"[{l['report']['page_abbr']} {page}]"
+                if valence_label:
+                    prefix += f" {valence_label}"
+                _add_annotation_bullet(doc, prefix, text)
 
 
 def _build_appendix(doc, result: GradingResult, locale: dict):
